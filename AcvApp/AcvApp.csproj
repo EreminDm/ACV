@@ -84,7 +84,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="img2\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="img\beauteous-1366x768-hd-wallpaper.jpg" />
     <Content Include="img\full-moon-over-lake-1366x768.jpg" />
@@ -92,11 +94,14 @@
     <Content Include="img\MsxWD9q.jpg" />
     <Content Include="img\new-wallpaper-full-hd-10.jpg" />
     <Content Include="img\zZ77XOI.jpg" />
-    <Content Include="logo\jcdecaux_logo.png" />
+    <Content Include="logo\logo.png" />
     <Content Include="packageConfig.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="playlistDirConfig.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="playlistDirConfig2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

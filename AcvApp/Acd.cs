@@ -20,6 +20,8 @@ namespace AcvApp
             public string clientType;
         }
 
+        public int contentFolderIndex = 1;
+
         public void startDownload()
         {
             string configSaveFilePath = @"C:\acv\conf\config.json";
@@ -150,7 +152,22 @@ namespace AcvApp
         // add to playlist dir
         public void AddToPlaylistFiles()
         {
-            string playlistdir = File.ReadAllText("/acv/program/playlistDirConfig.txt", Encoding.UTF8);
+            Form1 form = new Form1();
+
+            string playlistdir = "";
+            if (contentFolderIndex == 1)
+            {
+                playlistdir = File.ReadAllText("/acv/program/playlistDirConfig2.txt", Encoding.UTF8);
+                contentFolderIndex = 1;
+                form.playingCOntentFolderAdres = "/acv/program/img2";
+                
+            }
+            else
+            {
+                playlistdir = File.ReadAllText("/acv/program/playlistDirConfig.txt", Encoding.UTF8);
+                contentFolderIndex = 2;
+            }
+            
             string chekedLocalFilePath = @"C:\acv\workcontent\";
             CleanDir(playlistdir);
             // необходимо переделать только а удаление не нужных файлов

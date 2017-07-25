@@ -14,7 +14,7 @@ namespace AcvApp
 {
     public partial class Form1 : Form
     {
-        
+        public string playingCOntentFolderAdres = "/acv/program/img";
         private bool isTimerStarted = false;
         private FileInfo[] imageFiles;
 
@@ -37,7 +37,7 @@ namespace AcvApp
             isTimerStarted = true;
             currentImageIndex = 0;
 
-            currentImage = new FileInfo("/acv/program/logo/jcdecaux_logo.png");
+            currentImage = new FileInfo("/acv/program/logo/logo.png");
             pictureBox1.Image = Image.FromFile(currentImage.FullName);
 
             this.KeyDown += new KeyEventHandler(Form1_KeyDown);
@@ -58,7 +58,7 @@ namespace AcvApp
 
         private void showNextContentTimer_Tick(object sender, EventArgs e)
         {
-            DirectoryInfo Folder = new DirectoryInfo("/acv/program/img"); 
+            DirectoryInfo Folder = new DirectoryInfo(playingCOntentFolderAdres); 
             imageFiles = Folder.GetFiles("*.jpg")
                       .Concat(Folder.GetFiles("*.gif"))
                       .Concat(Folder.GetFiles("*.png"))
@@ -78,7 +78,7 @@ namespace AcvApp
             catch (ArgumentNullException expn)
             {
                 currentImageIndex = 0;
-                currentImage = new FileInfo("/acv/program/logo/jcdecaux_logo.png");
+                currentImage = new FileInfo("/acv/program/logo/logo.png");
             }
 
             pictureBox1.Image = Image.FromFile(currentImage.FullName);
@@ -93,11 +93,11 @@ namespace AcvApp
             try
             {
                 acd.startDownload();
-                Thread.Sleep(2000);
-                currentImageIndex = 0;
-                currentImage = new FileInfo("/acv/program/logo/jcdecaux_logo.png");
-                pictureBox1.Image = Image.FromFile(currentImage.FullName);
-                currentImageIndex++;
+                //Thread.Sleep(2000);
+                //currentImageIndex = 0;
+                //currentImage = new FileInfo("/acv/program/logo/logo.png");
+                //pictureBox1.Image = Image.FromFile(currentImage.FullName);
+                //currentImageIndex++;
                 this.showNextContentTimer.Stop();
                 this.startDownloadTimer.Stop();
                 acd.AddToPlaylistFiles();
