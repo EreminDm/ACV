@@ -14,7 +14,9 @@ namespace AcvApp
 {
     public partial class Form1 : Form
     {
-        public string playingCOntentFolderAdres = "/acv/program/img";
+        public string playingconfdir = "/acv/program/img";
+        public int contentFolderIndex = 1;
+        public int contentPictureBox = 1;
         private bool isTimerStarted = false;
         private FileInfo[] imageFiles;
 
@@ -24,6 +26,8 @@ namespace AcvApp
         public Form1()
         {
             InitializeComponent();
+            Cursor.Hide();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -39,6 +43,7 @@ namespace AcvApp
 
             currentImage = new FileInfo("/acv/program/logo/logo.png");
             pictureBox1.Image = Image.FromFile(currentImage.FullName);
+            pictureBox2.Image = Image.FromFile(currentImage.FullName);
 
             this.KeyDown += new KeyEventHandler(Form1_KeyDown);
 
@@ -56,9 +61,39 @@ namespace AcvApp
             }
         }
 
+        private void animationPB2Down()
+        {
+            // animation of picture boxes 
+            pictureBox2.BringToFront();
+            pictureBox1.Visible = true;
+            for (int i = 0; i < 1920; i++)
+            {
+                pictureBox2.Location = new Point(pictureBox2.Location.X, pictureBox2.Location.Y + 1);
+                Thread.Sleep(3);
+            }
+            pictureBox2.Visible = false;
+            pictureBox1.Location = new Point(0, 0);
+        }
+
+        private void animationPB1Down()
+        {
+            pictureBox1.BringToFront();
+            pictureBox2.Visible = true;
+            for (int i = 0; i < 1920; i++)
+            {
+                // pictureBox1.Top -= i;
+                //pictureBox2.Top = 0;
+                pictureBox1.Location = new Point(pictureBox1.Location.X, pictureBox1.Location.Y + 1);
+                Thread.Sleep(3);
+            }
+            pictureBox1.Visible = false;
+            pictureBox1.Location = new Point(0, 0);
+        }
+
         private void showNextContentTimer_Tick(object sender, EventArgs e)
         {
-            DirectoryInfo Folder = new DirectoryInfo(playingCOntentFolderAdres); 
+
+            DirectoryInfo Folder = new DirectoryInfo(playingconfdir);
             imageFiles = Folder.GetFiles("*.jpg")
                       .Concat(Folder.GetFiles("*.gif"))
                       .Concat(Folder.GetFiles("*.png"))
@@ -80,16 +115,46 @@ namespace AcvApp
                 currentImageIndex = 0;
                 currentImage = new FileInfo("/acv/program/logo/logo.png");
             }
+            if (contentPictureBox == 1)
+            {
+                
+                pictureBox2.Image = Image.FromFile(currentImage.FullName);
+                contentPictureBox = 2;
+            }
+            else
+            {
 
-            pictureBox1.Image = Image.FromFile(currentImage.FullName);
+                
+                pictureBox1.Image = Image.FromFile(currentImage.FullName);
+                contentPictureBox = 1;
+            }
             currentImageIndex++;
+            if (contentPictureBox == 1)
+            {
+                animationPB1Down();
 
+            }
+            else
+            {
+                animationPB2Down();
+            }
         }
 
         private void startDownloadTimer_Tick(object sender, EventArgs e)
         {
-            
+            if (contentFolderIndex == 1)
+            {
+                playingconfdir = File.ReadAllText("/acv/program/playlistDirConfig2.txt", Encoding.UTF8);
+                contentFolderIndex = 2;
+            }
+            else
+            {
+                playingconfdir = File.ReadAllText("/acv/program/playlistDirConfig.txt", Encoding.UTF8);
+                contentFolderIndex = 1;
+            }
+
             Acd acd = new Acd();
+            
             try
             {
                 acd.startDownload();
@@ -100,13 +165,15 @@ namespace AcvApp
                 //currentImageIndex++;
                 this.showNextContentTimer.Stop();
                 this.startDownloadTimer.Stop();
-                acd.AddToPlaylistFiles();
+                acd.AddToPlaylistFiles(playingconfdir);
 
             }
             catch(Exception err)
             {
-                MessageBox.Show(err.StackTrace);
+                // необходимо сделать запись в локальный log файл
+               // MessageBox.Show(err.StackTrace);
             }
+            
             this.showNextContentTimer.Start();
             this.startDownloadTimer.Start();
         }

@@ -20,6 +20,7 @@ namespace AcvApp
             public string clientType;
         }
 
+        public string playlistdir = "";
         public int contentFolderIndex = 1;
 
         public void startDownload()
@@ -150,30 +151,16 @@ namespace AcvApp
         }
 
         // add to playlist dir
-        public void AddToPlaylistFiles()
+        public void AddToPlaylistFiles(string palylistDir)
         {
-            Form1 form = new Form1();
-
-            string playlistdir = "";
-            if (contentFolderIndex == 1)
-            {
-                playlistdir = File.ReadAllText("/acv/program/playlistDirConfig2.txt", Encoding.UTF8);
-                contentFolderIndex = 1;
-                form.playingCOntentFolderAdres = "/acv/program/img2";
-                
-            }
-            else
-            {
-                playlistdir = File.ReadAllText("/acv/program/playlistDirConfig.txt", Encoding.UTF8);
-                contentFolderIndex = 2;
-            }
+            
             
             string chekedLocalFilePath = @"C:\acv\workcontent\";
-            CleanDir(playlistdir);
+            CleanDir(palylistDir);
             // необходимо переделать только а удаление не нужных файлов
 
             foreach (var file in Directory.GetFiles(chekedLocalFilePath))
-                File.Copy(file, Path.Combine(playlistdir, Path.GetFileName(file)), true);
+                File.Copy(file, Path.Combine(palylistDir, Path.GetFileName(file)), true);
 
         }
         private static String getMD5(String filepath)
