@@ -36,9 +36,7 @@ namespace AcvApp
 
             //get config from ftp server
             getFile(ftpConfigFullPath, configSaveFilePath, true);
-            readJSON(configSaveFilePath);
-           
-            //  Console.ReadLine();
+            readJSON(configSaveFilePath);          
         }
 
         public static void getFile(string ftpFilePath, string localSaveDir, bool isJSON)
